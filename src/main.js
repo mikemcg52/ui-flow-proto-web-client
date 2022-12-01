@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import 'core-js'
+import QuestionHub from '@/question-hub'
 
 // Setup axios as the Vue default $http library
 axios.defaults.baseURL = 'https://localhost:7216' // same as the Url the server listens to
@@ -15,6 +16,7 @@ axios.defaults.baseURL = 'https://localhost:7216' // same as the Url the server 
 const app = createApp(App)
   .use(BootstrapVue3)
   .use(router)
+  .use(QuestionHub)
 
 app.config.globalProperties.$axios = axios
 app.mount('#app')
