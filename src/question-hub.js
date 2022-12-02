@@ -1,7 +1,7 @@
 import { HubConnectionBuilder, LogLevel, HttpTransportType } from '@aspnet/signalr'
 
 export default {
-  install: (app, options) => {
+  install (app, options) {
     const connection = new HubConnectionBuilder()
       // .withUrl(`${this.$axios.defaults.baseURL}/question-hub`, {
       .withUrl('https://localhost:7216/question-hub', {
@@ -22,6 +22,10 @@ export default {
     }
     connection.onclose(() => start())
 
+    connection.on('QuestionScoreChange', (questionId, score) => {
+      console.log(`Score Change: ${questionId} ${score}`)
+      $emit('score-changed', { questionId, score })
+    })
     start()
   }
 }

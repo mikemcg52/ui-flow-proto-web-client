@@ -6,6 +6,7 @@
   </h3>
 </template>
 <script>
+
 export default {
   props: {
     question: {
@@ -13,17 +14,24 @@ export default {
       required: true
     }
   },
+  /* created () {
+    this.$questionHub.$on('score-changed', this.onScoreChanged)
+  }, */
   methods: {
     onUpvote () {
-      this.$http.patch(`/api/question/${this.question.id}/upvote`).then(res => {
+      this.$axios.patch(`/api/question/${this.question.id}/upvote`).then(res => {
         Object.assign(this.question, res.data)
       })
     },
     onDownvote () {
-      this.$http.patch(`/api/question/${this.question.id}/downvote`).then(res => {
+      this.$axios.patch(`/api/question/${this.question.id}/downvote`).then(res => {
         Object.assign(this.question, res.data)
       })
-    }
+    }/* ,
+    onScoreChanged ({ questionId, score }) {
+      if (this.question.id !== questionId) return
+      Object.assign(this.question, { score })
+    } */
   }
 }
 </script>

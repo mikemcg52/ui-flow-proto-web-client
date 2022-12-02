@@ -19,4 +19,5 @@ const app = createApp(App)
   .use(QuestionHub)
 
 app.config.globalProperties.$axios = axios
+app.config.globalProperties.$questionHub = QuestionHub
 app.mount('#app')
