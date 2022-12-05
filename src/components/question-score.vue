@@ -6,17 +6,28 @@
   </h3>
 </template>
 <script>
+import PubSub from 'pubsub.js'
 
 export default {
+  data () {
+    return {
+      subscription: null
+    }
+  },
   props: {
     question: {
       type: Object,
       required: true
     }
   },
-  /* created () {
-    this.$questionHub.$on('score-changed', this.onScoreChanged)
-  }, */
+  created () {
+    this.subscription = PubSub.subscribe('score-changed', this.onScoreChanged)
+  },
+  beforeUnmount () {
+    if (this.subscription) {
+      PubSub.unsubscribe(this.subscription)
+    }
+  },
   methods: {
     onUpvote () {
       this.$axios.patch(`/api/question/${this.question.id}/upvote`).then(res => {
@@ -27,11 +38,14 @@ export default {
       this.$axios.patch(`/api/question/${this.question.id}/downvote`).then(res => {
         Object.assign(this.question, res.data)
       })
-    }/* ,
-    onScoreChanged ({ questionId, score }) {
-      if (this.question.id !== questionId) return
+    },
+    onScoreChanged (data) {
+      const message = JSON.parse(data)
+      if (this.question.id !== message.questionId) return
+      const score = message.score
+      // this.question.score = message.score
       Object.assign(this.question, { score })
-    } */
+    }
   }
 }
 </script>

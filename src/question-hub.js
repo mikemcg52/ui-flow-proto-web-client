@@ -1,4 +1,5 @@
 import { HubConnectionBuilder, LogLevel, HttpTransportType } from '@aspnet/signalr'
+import PubSub from 'pubsub.js'
 
 export default {
   install (app, options) {
@@ -23,8 +24,13 @@ export default {
     connection.onclose(() => start())
 
     connection.on('QuestionScoreChange', (questionId, score) => {
-      console.log(`Score Change: ${questionId} ${score}`)
-      $emit('score-changed', { questionId, score })
+      // $emit('score-changed', { questionId, score })
+      PubSub.publish('score-changed', [
+        JSON.stringify({
+          questionId: questionId,
+          score: score
+        })
+      ])
     })
     start()
   }
