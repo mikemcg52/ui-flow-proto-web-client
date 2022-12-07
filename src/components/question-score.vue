@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     onUpvote () {
+      console.log(`question upvoted: ${this.question.id}`)
       this.$axios.patch(`/api/question/${this.question.id}/upvote`).then(res => {
         Object.assign(this.question, res.data)
       })
