@@ -36,10 +36,20 @@ export default {
   },
   methods: {
     onSubmit (evt) {
-      this.$http.post('api/question', this.form).then(res => {
-        this.$emit('question-added', res.data)
-        this.$refs.addQuestionModal.hide()
+      console.log(this.form)
+      this.$axios.post('/api/question/', {
+        title: this.form.title,
+        body: this.form.body,
+        answers: []
       })
+        .then(res => {
+          this.$emit('question-added', res.data)
+          this.$refs.addQuestionModal.hide()
+        })
+        .catch(err => {
+          console.log(err.message)
+          console.trace()
+        })
     },
     onCancel (evt) {
       this.$refs.addQuestionModal.hide()
