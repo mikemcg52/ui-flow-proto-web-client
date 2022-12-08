@@ -27,16 +27,7 @@ export default {
       // console.log(alert.alertId)
       PubSub.publish('alert-added', [
         JSON.stringify({
-          alertId: alert.alertId,
-          alertClass: alert.alertClass,
-          district: alert.district,
-          topic: alert.topic,
-          priority: alert.priority,
-          alertDate: alert.alertDate,
-          alarmId: alert.alarmId,
-          site: alert.site,
-          housing: alert.housing,
-          facility: alert.facility,
+          ...alert,
           modified_flag: true
         })
       ])
