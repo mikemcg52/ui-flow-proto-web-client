@@ -25,6 +25,7 @@
 
 <script>
 import { DateTime } from 'luxon'
+import PubSub from 'pubsub.js'
 export default {
   name: 'alert-list',
   data () {
@@ -39,35 +40,11 @@ export default {
         alarmId: '9099',
         site: 'Base',
         housing: 0,
-        facility: 'Gym'
+        facility: 'Gym',
+        modified_flag: false
       },
-      alerts: [
-        {
-          alertId: '5001',
-          alertClass: 'Fire',
-          district: 'D1',
-          topic: 'Topic A',
-          priority: 4,
-          alertDate: '12/1/22 8:00',
-          alarmId: '9099',
-          site: 'Base',
-          housing: 0,
-          facility: 'Gym',
-          modified_flag: false
-        },
-        {
-          alertId: '5002',
-          alertClass: 'EMT',
-          district: 'D6',
-          topic: 'Topic Z',
-          priority: 3,
-          alertDate: '12/1/22 9:00',
-          alarmId: '9090',
-          site: 'Base',
-          housing: 0,
-          facility: 'Gym'
-        }
-      ]
+      alerts: [],
+      subscription: null
     }
   },
   created () {
@@ -78,12 +55,18 @@ export default {
       .catch(err => {
         console.log(err)
       })
-    
+    this.subscription = PubSub.subscribe('alert-added', this.alertAdded)
   },
   methods: {
     dateFormat: (el) => {
-      console.log(el)
       return DateTime.fromISO(el).toLocaleString(DateTime.DATETIME_SHORT)
+    },
+    alertAdded: function (data) {
+      console.log(`subscription message: ${data}`)
+      const subData = JSON.parse(data)
+      if (subData) {
+        this.alerts.push(subData)
+      }
     }
   }
 }
